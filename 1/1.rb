@@ -1,4 +1,4 @@
-data = File.readlines('data1.txt')
+data = File.readlines('input')
 
 def get_number(str)
     first = last = 0

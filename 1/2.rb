@@ -1,4 +1,4 @@
-data = File.readlines('data1.txt')
+data = File.readlines('input')
 
 NUMBERS = { 'one' => 1,
             'two' => 2,
