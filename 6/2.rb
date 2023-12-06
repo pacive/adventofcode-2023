@@ -4,14 +4,11 @@ def parse(data)
     [times, dists]
 end
 
-times, dists = parse(File.readlines('input'))
+time, dist = parse(File.readlines('input'))
 
-total = []
-
-c = times / 2
-wins = times.even? ? -1 : 0
-while c * (times - c) > dists
-    wins += 2
-    c -= 1
+d = Math.sqrt(time **  2 / 4.0 - (dist + 0.1))
+if time.even?
+    puts d.floor * 2 + 1
+else
+    puts d.round * 2
 end
-puts wins

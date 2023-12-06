@@ -9,13 +9,12 @@ times, dists = parse(File.readlines('input'))
 total = []
 
 times.length.times do |i|
-    c = times[i] / 2
-    wins = times[i].even? ? -1 : 0
-    while c * (times[i] - c) > dists[i]
-        wins += 2
-        c -= 1
+    d = Math.sqrt(times[i] **  2 / 4.0 - (dists[i] + 0.1))
+    if times[i].even?
+        total << d.floor * 2 + 1
+    else
+        total << d.round * 2
     end
-    total << wins
 end
 
 puts total.reduce(&:*)
