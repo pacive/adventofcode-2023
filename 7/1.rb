@@ -3,7 +3,7 @@ require 'set'
 class Hand
     CARDS = %w(2 3 4 5 6 7 8 9 T J Q K A)
 
-    HANDS = %i(five four house three two pair high)
+    HANDS = %i(high pair two three house four five)
 
     attr_reader :hand, :bid
 
@@ -43,7 +43,7 @@ class Hand
 
         5.times do |i|
             cs, co = CARDS.index(@hand[i]), CARDS.index(other.hand[i])
-            return co <=> cs unless cs == co
+            return cs <=> co unless cs == co
         end
         return 0
     end
@@ -53,7 +53,7 @@ class Hand
     end
 end
 
-hands = File.readlines('input').map { |line| Hand.new(*line.split(' ')) }.sort.reverse
+hands = File.readlines('input').map { |line| Hand.new(*line.split(' ')) }.sort
 
 total = 0
 
