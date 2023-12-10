@@ -98,29 +98,21 @@ class Maze
         end
         find_start
         move()
-        replace_right_hand_symbol('.', ' ')
+        replace_right('.', ' ')
         turn()
-        replace_right_hand_symbol('.', ' ')
+        replace_right('.', ' ')
         until @data[@x][@y] == 'S'
             move()
-            replace_right_hand_symbol('.', ' ')
+            replace_right('.', ' ')
             turn()
-            replace_right_hand_symbol('.', ' ')
+            replace_right('.', ' ')
         end
         @data.length.times do |i|
-            @data[i].length.times do |j|
-                if j == 0
-                    if @data[i][j] == '.'
-                        @data[i][j] = ' '
-                    end
-                elsif @data[i][j] == '.' && @data[i][j - 1] == ' '
-                    @data[i][j] = ' '
-                end
-            end
+            @data[i].gsub!(/(^\.+)|(\s\.+)/) { |match| ' ' * $&.length}
         end
     end
 
-    def replace_right_hand_symbol(char, replace)
+    def replace_right(char, replace)
         x, y = case @dir
         when :N then [@x, @y + 1]
         when :E then [@x + 1, @y]
