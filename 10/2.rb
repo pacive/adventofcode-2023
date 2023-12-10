@@ -87,15 +87,21 @@ class Maze
         end
     end
 
+    # Runs several passes over the input data to clean up everything but the
+    # '.'s inside the path
     def isolate_path
         if @loop_tiles.nil?
             find_loop()
         end
+        # Replace everything that's not part of the path with '.'
         @data.length.times do |i|
             @data[i].length.times do |j|
                 @data[i][j] = '.' unless @loop_tiles.include?([i, j]) || @data[i][j] == "\n"
             end
         end
+        # Replace any '.' on the right hand side with a space.
+        # The path was manually determined to go counter-clockwise around the edge,
+        # otherwise '.'s on the left would have needed to be replaces instead
         find_start
         move()
         replace_right('.', ' ')
@@ -107,6 +113,8 @@ class Maze
             turn()
             replace_right('.', ' ')
         end
+        # Replace all series of '.' with space if they start at the begginning of the 
+        # line, or with a space
         @data.length.times do |i|
             @data[i].gsub!(/(^\.+)|(\s\.+)/) { |match| ' ' * $&.length}
         end
