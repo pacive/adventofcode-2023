@@ -76,7 +76,7 @@ class Maze
 
     def find_loop()
         @loop_length = 1
-        @loop_tiles = Set[@x, @y]
+        @loop_tiles = Set[[@x, @y]]
         move()
         turn()
         until @data[@x][@y] == 'S'
@@ -93,7 +93,7 @@ class Maze
         end
         @data.length.times do |i|
             @data[i].length.times do |j|
-                @data[i][j] = '.' unless @loop_tiles.include?([i, j]) || @data[i][j] == "\n" || @data[i][j] == 'S'
+                @data[i][j] = '.' unless @loop_tiles.include?([i, j]) || @data[i][j] == "\n"
             end
         end
         find_start
