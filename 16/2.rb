@@ -25,15 +25,8 @@ class Grid
         @grid.length
     end
 
-    def to_s
-        str = ''
-        height.times do |i|
-            @energized.row(i) do |n|
-                str << (n.zero? ? '.' : '#')
-            end
-            str << "\n"
-        end
-        str
+    def reset()
+        @energized = Matrix.zero(grid.length, grid[0].length)
     end
 end
 
@@ -92,18 +85,12 @@ class Beam
         when '-'
             if %i(up down).include?(@direction)
                 Beam.new(@grid, @x, @y, :left, @path).trace
-                Beam.new(@grid, @x, @y, :right, @path).trace
-                true
-            else
-                false
+                @direction = :right
             end
         when '|'
             if %i(left right).include?(@direction)
                 Beam.new(@grid, @x, @y, :up, @path).trace
-                Beam.new(@grid, @x, @y, :down, @path).trace
-                true
-            else
-                false
+                @direction = :down
             end
         end
     end
@@ -115,7 +102,7 @@ class Beam
             if %w[/ \\].include?(@grid[@x, @y])
                 turn
             elsif %w[- |].include?(@grid[@x, @y])
-                break if split
+                split
             end
             move
             break if @x < 0 || @y < 0 || @x >= @grid.height ||
@@ -124,25 +111,25 @@ class Beam
     end
 end
 
-grid = File.readlines('input').map(&:strip)
+grid = Grid.new(File.readlines('input').map(&:strip))
 
 sums = []
-grid.length.times do |i|
-    g = Grid.new(grid)
-    Beam.new(g, i).trace
-    sums << g.energized.sum
-    g = Grid.new(grid)
-    Beam.new(g, i, g.width - 1, :left).trace
-    sums << g.energized.sum
+grid.height.times do |i|
+    Beam.new(grid, i).trace
+    sums << grid.energized.sum
+    grid.reset
+    Beam.new(grid, i, grid.width - 1, :left).trace
+    sums << grid.energized.sum
+    grid.reset
 end
 
-grid[0].length.times do |i|
-    g = Grid.new(grid)
-    Beam.new(g, 0, i, :down).trace
-    sums << g.energized.sum
-    g = Grid.new(grid)
-    Beam.new(g, g.height - 1, i, :up).trace
-    sums << g.energized.sum
+grid.width.times do |i|
+    Beam.new(grid, 0, i, :down).trace
+    sums << grid.energized.sum
+    grid.reset
+    Beam.new(grid, grid.height - 1, i, :up).trace
+    sums << grid.energized.sum
+    grid.reset
 end
 
 puts sums.max

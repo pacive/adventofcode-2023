@@ -92,18 +92,12 @@ class Beam
         when '-'
             if %i(up down).include?(@direction)
                 Beam.new(@grid, @x, @y, :left, @path).trace
-                Beam.new(@grid, @x, @y, :right, @path).trace
-                true
-            else
-                false
+                @direction = :right
             end
         when '|'
             if %i(left right).include?(@direction)
                 Beam.new(@grid, @x, @y, :up, @path).trace
-                Beam.new(@grid, @x, @y, :down, @path).trace
-                true
-            else
-                false
+                @direction = :down
             end
         end
     end
@@ -115,7 +109,7 @@ class Beam
             if %w[/ \\].include?(@grid[@x, @y])
                 turn
             elsif %w[- |].include?(@grid[@x, @y])
-                break if split
+                split
             end
             move
             break if @x < 0 || @y < 0 || @x >= @grid.height ||
